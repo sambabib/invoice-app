@@ -1,20 +1,25 @@
 <template>
-  <div v-if="!mobile" class="app flex flex-column">
-    <Navigation />
-    <div class="app-content flex flex-column">
-      <InvoiceModal />
-      <Home />
-      <router-view />
+  <div v-if="invoicesLoaded">
+    <div v-if="!mobile" class="app flex flex-column">
+      <Navigation />
+      <div class="app-content flex flex-column">
+        <Modal v-if="modalActive" />
+        <transition name="invoice">
+          <InvoiceModal v-if="invoiceModal" />
+        </transition>
+        <router-view />
+      </div>
     </div>
-  </div>
-  <div v-else class="mobile-message flex flex-column">
-    <h2>You need to view this on a tablet or pc, soz :)</h2>
+    <div v-else class="mobile-message flex flex-column">
+      <h2>You need to view this on a tablet or pc, soz :)</h2>
+    </div>
   </div>
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
+  import Modal from './components/Modal.vue';
   import Navigation from './components/Navigation.vue';
-  import Home from './views/Home.vue';
   import InvoiceModal from './components/InvoiceModal.vue';
 
   export default {
@@ -26,14 +31,17 @@
     name: 'App',
     components: {
       Navigation,
-      Home,
-      InvoiceModal
+      InvoiceModal,
+      Modal,
     },
     created() {
+      this.GET_INVOICES();
       this.checkScreen();
       window.addEventListener('resize', this.checkScreen);
     },
     methods: {
+      ...mapActions(['GET_INVOICES']),
+
       checkScreen() {
         const windowWith = window.innerWidth;
         if (windowWith <= 750) {
@@ -42,6 +50,9 @@
         }
         this.mobile = false;
       },
+    },
+    computed: {
+      ...mapState(['invoiceModal', 'modalActive', 'invoicesLoaded']),
     },
   };
 </script>
@@ -101,7 +112,7 @@
     padding: 16px 24px;
     border-radius: 30px;
     border: none;
-    font-size: 12px;
+    font-size: 0.6rem;
     margin-right: 8px;
     color: #fff;
   }
@@ -162,7 +173,7 @@
       border-radius: 50%;
       margin-right: 8px;
     }
-    font-size: 12px;
+    font-size: 0.6rem;
     margin-right: 30px;
     align-items: center;
     padding: 8px 30px;

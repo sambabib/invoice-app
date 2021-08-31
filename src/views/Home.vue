@@ -24,24 +24,44 @@
         </div>
       </div>
     </div>
+
+    <!-- invoices -->
+    <div>
+      <Invoice
+        v-for="(invoice, index) in invoiceData"
+        :invoice="invoice"
+        :key="index"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+  import Invoice from '../components/Invoice.vue';
+  import { mapMutations, mapState } from 'vuex';
+
   export default {
+    name: "Home",
     data() {
       return {
         filterMenu: null,
       };
     },
-    name: 'Home',
-    components: {},
+    components: {
+      Invoice,
+    },
     methods: {
-      newInvoice() {},
+      ...mapMutations(['TOGGLE_INVOICE']),
+      newInvoice() {
+        this.TOGGLE_INVOICE();
+      },
 
       toggleFilterMenu() {
         this.filterMenu = !this.filterMenu;
       },
+    },
+    computed: {
+      ...mapState(['invoiceData']),
     },
   };
 </script>
@@ -59,6 +79,14 @@
       flex: 1;
     }
 
+    h1 {
+      font-size: 1rem;
+    }
+
+    span {
+      font-size: 0.7rem;
+    }
+
     .right {
       justify-content: flex-end;
       align-items: center;
@@ -68,7 +96,7 @@
         align-items: center;
 
         span {
-          font-size: 12px;
+          font-size: 0.7rem;
         }
       }
     }
@@ -77,6 +105,7 @@
       position: relative;
       margin-right: 40px;
       cursor: pointer;
+      font-size: 0.7rem;
 
       img {
         margin-left: 12px;
@@ -95,7 +124,7 @@
 
         li {
           cursor: pointer;
-          font-size: 12px;
+          font-size: 0.7rem;
           padding: 10px 20px;
 
           &:hover {
@@ -107,9 +136,10 @@
     }
 
     .button {
-      padding: 8px 10px;
+      padding: 8px 16px;
       background-color: #7c5dfa;
       border-radius: 40px;
+      font-size: 0.6rem !important;
 
       .inner-button {
         margin-right: 8px;
