@@ -3,6 +3,7 @@ import db from '../firebase/firebaseinit';
 
 export default createStore({
   state: {
+    currentInvoiceArray: null,
     invoiceData: [],
     invoiceModal: null,
     invoicesLoaded: null,
@@ -17,10 +18,14 @@ export default createStore({
     },
     SET_INVOICE_DATA(state, payload) {
       state.invoiceData.push(payload);
-      console.log(state.invoiceData);
     },
     INVOICES_LOADED(state) {
       state.invoicesLoaded = true;
+    },
+    SET_CURRENT_INVOICE(state, payload) {
+      state.currentInvoiceArray = state.invoiceData.filter(invoice => (
+        invoice.invoiceId === payload
+      ));
     },
   },
   actions: {

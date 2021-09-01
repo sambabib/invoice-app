@@ -26,12 +26,19 @@
     </div>
 
     <!-- invoices -->
-    <div>
+    <div v-if="invoiceData.length > 0">
       <Invoice
         v-for="(invoice, index) in invoiceData"
         :invoice="invoice"
         :key="index"
       />
+    </div>
+    <div v-else class="empty flex flex-column">
+      <img src="@/assets/illustration-empty.svg" alt="" />
+      <h3>There is nothing here</h3>
+      <p>
+        Create a new invoice by clicking the New Invoice button to get started
+      </p>
     </div>
   </div>
 </template>
@@ -41,7 +48,7 @@
   import { mapMutations, mapState } from 'vuex';
 
   export default {
-    name: "Home",
+    name: 'Home',
     data() {
       return {
         filterMenu: null,
@@ -153,6 +160,29 @@
           height: 10px;
           width: 10px;
         }
+      }
+    }
+
+    .empty {
+      margin-top: 160px;
+      align-items: center;
+
+      img {
+        width: 214px;
+        height: 200px;
+      }
+
+      h3 {
+        font-size: 0.8rem;
+        margin-top: 40px;
+      }
+
+      p {
+        text-align: center;
+        max-width: 224px;
+        font-size: 0.6rem;
+        font-weight: 300;
+        margin-top: 16px;
       }
     }
   }
