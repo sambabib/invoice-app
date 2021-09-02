@@ -23,12 +23,7 @@
       </div>
 
       <div class="right flex">
-        <button
-          @click="toggleEditInvoice(currentInvoice.docId)"
-          class="dark-purple"
-        >
-          Edit
-        </button>
+        <button @click="toggleEditInvoice" class="dark-purple">Edit</button>
         <button @click="deleteInvoice(currentInvoice.docId)" class="red">
           Delete
         </button>
@@ -41,7 +36,7 @@
         </button>
         <button
           v-if="currentInvoice.invoiceDraft || currentInvoice.invoicePaid"
-          @click="updateStatusToPending"
+          @click="updateStatusToPending(currentInvoice.docId)"
           class="orange"
         >
           Mark as Pending
@@ -119,7 +114,7 @@
 </template>
 
 <script>
-  import { mapState, mapMutations } from 'vuex';
+  import { mapState, mapMutations, mapActions } from 'vuex';
   export default {
     data() {
       return {
@@ -131,15 +126,50 @@
     },
     name: 'InvoiceView',
     methods: {
-      ...mapMutations(['SET_CURRENT_INVOICE']),
+      ...mapMutations([
+        'SET_CURRENT_INVOICE',
+        'TOGGLE_EDIT_INVOICE',
+        'TOGGLE_INVOICE',
+      ]),
+
+      ...mapActions([
+        'DELETE_INVOICE',
+        'UPDATE_STATUS_TO_PENDING',
+        'UPDATE_STATUS_TO_PAID',
+      ]),
 
       getCurrentInvoice() {
         this.SET_CURRENT_INVOICE(this.$route.params.invoiceId);
         this.currentInvoice = this.currentInvoiceArray[0];
       },
+
+      toggleEditInvoice() {
+        this.TOGGLE_EDIT_INVOICE();
+        this.TOGGLE_INVOICE();
+      },
+
+      async deleteInvoice(docId) {
+        await this.DELETE_INVOICE(docId);
+        this.$router.push({ name: 'Home' });
+      },
+
+      updateStatusToPaid(docId) {
+        this.UPDATE_STATUS_TO_PAID(docId);
+      },
+
+      updateStatusToPending(docId) {
+        this.UPDATE_STATUS_TO_PENDING(docId);
+      },
     },
     computed: {
-      ...mapState(['currentInvoiceArray']),
+      ...mapState(['currentInvoiceArray', 'editInvoice']),
+    },
+    watch: {
+      editInvoice() {
+        if (!this.editInvoice) {
+          this.currentInvoice = this.currentInvoiceArray[0];
+        }
+      },
     },
   };
 </script>
