@@ -6,8 +6,8 @@ var firebaseConfig = {
   authDomain: "invoice-app-53623.firebaseapp.com",
   projectId: "invoice-app-53623",
   storageBucket: "invoice-app-53623.appspot.com",
-  messagingSenderId: "1042142908247",
-  appId: "1:1042142908247:web:3e751c9a8fc56c46b8f812"
+  messagingSenderId: process.env.VUE_APP_SENDER_ID,
+  appId: process.env.VUE_APP_ID
 };
 
 
