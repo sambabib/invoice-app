@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 var firebaseConfig = {
-  apiKey: "AIzaSyCjCqagUATUfpcm3cd98et7EQ2DGNV1-z0",
+  apiKey: process.env.VUE_APP_KEY,
   authDomain: "invoice-app-53623.firebaseapp.com",
   projectId: "invoice-app-53623",
   storageBucket: "invoice-app-53623.appspot.com",
